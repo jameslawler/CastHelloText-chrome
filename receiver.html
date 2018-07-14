@@ -37,8 +37,9 @@ limitations under the License.
     <title>Cast Hello Text</title>
   </head>
   <body>
-  <div id="message">Talk to me</div>
-  <iframe width="640" height="360" src="https://www.youtube.com/embed/cgD3LT76LyU" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  <div id="message">
+     <iframe width="640" height="360" src="https://www.youtube.com/embed/cgD3LT76LyU" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
     <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
     <script type="text/javascript">
       window.onload = function() {
@@ -80,8 +81,13 @@ limitations under the License.
         // handler for the CastMessageBus message event
         window.messageBus.onMessage = function(event) {
           console.log('Message [' + event.senderId + ']: ' + event.data);
-          // display the message from the sender
-          displayText(event.data);
+             
+          if (event.data === 'video') {
+               displayVideo('');     
+          } else {
+               // display the message from the sender
+               displayText(event.data);
+          }
           // inform all senders on the CastMessageBus of the incoming message event
           // sender message listener will be invoked
           window.messageBus.send(event.senderId, event.data);
@@ -97,6 +103,13 @@ limitations under the License.
         console.log(text);
         document.getElementById('message').innerText = text;
         window.castReceiverManager.setApplicationState(text);
+      };
+       
+      // utility function to display the text message in the input field
+      function displayVideo(videoId) {
+        console.log(videoId);
+        document.getElementById('message').innerHTML = '<iframe width="640" height="360" src="https://www.youtube.com/embed/cgD3LT76LyU" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+        window.castReceiverManager.setApplicationState('Playing video...');
       };
     </script>
   </body>
